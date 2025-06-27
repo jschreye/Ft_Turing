@@ -21,6 +21,10 @@ let load_machine json_file input =
   let finals   = json |> member "finals"   |> to_list |> filter_string in
   let blank    = json |> member "blank"    |> to_string in
   let trs      = parse_transitions json in
+  let states   = json |> member "states"   |> to_list |> filter_string in
+
+  (* ✅ Vérification complète *)
+  validate_machine ~alphabet ~states ~initial ~finals ~blank ~transitions:trs;
 
   Printf.printf "Nom de la machine : %s\n" name;
   Printf.printf "Alphabet : [ %s ]\n" (String.concat ", " alphabet);
@@ -30,8 +34,9 @@ let load_machine json_file input =
   let tape0 = init_tape input blank in
   Printf.printf "État initial de la bande :\n";
   show_tape tape0;
-
-  run blank trs finals initial tape0
+  
+  Printf.printf "\n🔁 Démarrage de la simulation...\n\n";
+  run ~blank ~trs ~finals ~state:initial ~tape:tape0 ~steps_left:1000
 
 let () =
   if Array.length Sys.argv < 2 then print_help ();

@@ -1,9 +1,22 @@
-all:
-	opam install --yes yojson > /dev/null || true
+.PHONY: all build run clean install
+
+# Nom de l’exécutable
+EXEC = main
+
+# Arguments de test par défaut
+JSON = machines/unary_sub.json
+INPUT = 111-11=
+
+all: install build
+
+install:
+	opam install --yes dune yojson
+
+build:
 	dune build
 
-run:
-	dune exec ./main.exe machines/unary_sub.json "111-11="
+run: build
+	dune exec ./$(EXEC).exe $(JSON) "$(INPUT)"
 
 clean:
 	dune clean
