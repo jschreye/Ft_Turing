@@ -1,0 +1,17 @@
+# dune exec ./main.exe machines/unary_sub.json 111-11=
+# OCAMLPARAM: unset
+# Shared cache: enabled-except-user-rules
+# Shared cache location: /Users/jeremieschreyer/.cache/dune/db
+# Workspace root: /Users/jeremieschreyer/Desktop/Ft_Turing
+# Auto-detected concurrency: 12
+# Dune context:
+#  { name = "default"
+#  ; kind = "default"
+#  ; profile = Dev
+#  ; merlin = true
+#  ; fdo_target_exe = None
+#  ; build_dir = In_build_dir "default"
+#  ; instrument_with = []
+#  }
+$ /Users/jeremieschreyer/.opam/4.14.0/bin/ocamlc.opt -config > /var/folders/ym/d6c19xk93ng89yscrymgqcf40000gn/T/dune_a8c88a_output
+$ (cd /Users/jeremieschreyer/Desktop/Ft_Turing && /Users/jeremieschreyer/Desktop/Ft_Turing/_build/default/main.exe machines/unary_sub.json 111-11=)

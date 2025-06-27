@@ -1,0 +1,9 @@
+(library
+ (name turinglib)
+ (modules types tape parser simulator)
+ (libraries yojson))
+ 
+(executable
+ (name main)
+ (modules main)
+ (libraries turinglib yojson))
