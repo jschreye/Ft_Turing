@@ -24,15 +24,29 @@ let parse_transitions json =
 
 let validate_machine ~alphabet ~states ~initial ~finals ~blank ~transitions =
   let alphabet_set = List.to_seq alphabet |> StringSet.of_seq in
-  let states_set   = List.to_seq states   |> StringSet.of_seq in
+  let states_set = List.to_seq states |> StringSet.of_seq in
 
-  (* Vérif 1 : initial ∈ states *)
+  (* Vérification longueur des symboles *)
+  List.iter (fun sym ->
+    if String.length sym <> 1 then begin
+      Printf.eprintf "❌ Erreur : symbole d’alphabet '%s' doit être de longueur 1\n" sym;
+      exit 1
+    end
+  ) alphabet;
+
+  (* Vérification que blank est dans alphabet *)
+  if not (StringSet.mem blank alphabet_set) then begin
+    Printf.eprintf "❌ Erreur : le symbole blanc '%s' n'est pas dans l'alphabet\n" blank;
+    exit 1
+  end;
+
+  (* Vérification état initial *)
   if not (StringSet.mem initial states_set) then begin
     Printf.eprintf "❌ Erreur : état initial invalide : '%s'\n" initial;
     exit 1
   end;
 
-  (* Vérif 2 : finals ⊆ states *)
+  (* Vérification états finaux *)
   List.iter (fun s ->
     if not (StringSet.mem s states_set) then begin
       Printf.eprintf "❌ Erreur : état final inconnu : '%s'\n" s;
@@ -40,7 +54,15 @@ let validate_machine ~alphabet ~states ~initial ~finals ~blank ~transitions =
     end
   ) finals;
 
-  (* Vérif 3/4 : transitions *)
+  (* Vérification que chaque état a des transitions *)
+  List.iter (fun state ->
+    if not (TransitionMap.mem state transitions) then begin
+      Printf.eprintf "❌ Erreur : l’état '%s' n’a pas de transitions définies\n" state;
+      exit 1
+    end
+  ) states;
+
+  (* Vérification contenu des transitions *)
   TransitionMap.iter (fun state trs ->
     if not (StringSet.mem state states_set) then begin
       Printf.eprintf "❌ Erreur : transitions définies pour un état inconnu : '%s'\n" state;
@@ -60,10 +82,4 @@ let validate_machine ~alphabet ~states ~initial ~finals ~blank ~transitions =
         exit 1
       end
     ) trs
-  ) transitions;
-
-  (* Vérif 5 : blank ∈ alphabet *)
-  if not (StringSet.mem blank alphabet_set) then begin
-    Printf.eprintf "❌ Erreur : le symbole blanc '%s' n'est pas dans l'alphabet\n" blank;
-    exit 1
-  end;
+  ) transitions

@@ -36,7 +36,7 @@ let load_machine json_file input =
   show_tape tape0;
   
   Printf.printf "\n🔁 Démarrage de la simulation...\n\n";
-  run ~blank ~trs ~finals ~state:initial ~tape:tape0 ~steps_left:1000
+  run ~blank ~trs ~finals ~state:initial ~tape:tape0 ~steps_left:1000 1
 
 let () =
   if Array.length Sys.argv < 2 then print_help ();

@@ -33,6 +33,7 @@
             { "read": "1", "to_state": "copy_one", "write": "1", "action": "RIGHT" },  
             { "read": ".", "to_state": "HALT", "write": ".", "action": "RIGHT" },
             { "read": "=", "to_state": "HALT", "write": "=", "action": "RIGHT" }
-          ]
+          ],
+          "HALT": []
     }
 }
