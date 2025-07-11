@@ -1,39 +1,43 @@
 {
-    "name": "unary_add",
-    "alphabet": [ "1", "+", "=", "." ],
-    "blank": ".",
-    "states": [
-      "scan_right", "copy_one", "go_left", "paste_one", "check_end", "HALT"
+  "name": "unary_add",
+  "alphabet": [ "1", "+", "=", "." ],
+  "blank": ".",
+  "states": [
+    "scan_right",
+    "copy_one",
+    "go_left",
+    "paste_one",
+    "check_end",
+    "HALT"
+  ],
+  "initial": "scan_right",
+  "finals": ["HALT"],
+  "transitions": {
+    "scan_right": [
+      { "read":"1", "to_state":"scan_right","write":"1","action":"RIGHT" },
+      { "read":"+", "to_state":"copy_one",  "write":".","action":"RIGHT" },
+      { "read":"=", "to_state":"check_end", "write":".","action":"LEFT"  },
+      { "read":".", "to_state":"scan_right","write":".","action":"RIGHT" }
     ],
-    "initial": "scan_right",
-    "finals": ["HALT"],
-    "transitions": 
-    {
-        "scan_right": [
-            { "read": "1", "to_state": "scan_right", "write": "1", "action": "RIGHT" },
-            { "read": "+", "to_state": "copy_one",   "write": ".", "action": "RIGHT" },
-            { "read": ".", "to_state": "scan_right", "write": ".", "action": "RIGHT" },
-            { "read": "=", "to_state": "check_end", "write": "=", "action": "LEFT" }
-          ],
-          "copy_one": [
-            { "read": "1", "to_state": "go_left",   "write": ".", "action": "LEFT" },
-            { "read": "=", "to_state": "HALT",      "write": "=", "action": "RIGHT" }
-          ],
-          "go_left": [
-            { "read": "1", "to_state": "go_left",   "write": "1", "action": "LEFT" },
-            { "read": "=", "to_state": "go_left",   "write": "=", "action": "LEFT" },
-            { "read": ".", "to_state": "paste_one", "write": ".", "action": "RIGHT" }
-          ],
-          "paste_one": [
-            { "read": "1", "to_state": "paste_one", "write": "1", "action": "RIGHT" },
-            { "read": "=", "to_state": "paste_one", "write": "=", "action": "RIGHT" },
-            { "read": ".", "to_state": "check_end", "write": "1", "action": "RIGHT" }
-          ],
-          "check_end": [
-            { "read": "1", "to_state": "copy_one", "write": "1", "action": "RIGHT" },  
-            { "read": ".", "to_state": "HALT", "write": ".", "action": "RIGHT" },
-            { "read": "=", "to_state": "HALT", "write": "=", "action": "RIGHT" }
-          ],
-          "HALT": []
-    }
+    "copy_one": [
+      { "read":"1", "to_state":"go_left",   "write":".","action":"LEFT"  },
+      { "read":"=", "to_state":"check_end","write":".","action":"RIGHT" }
+    ],
+    "go_left": [
+      { "read":"1", "to_state":"go_left",   "write":"1","action":"LEFT"  },
+      { "read":"=", "to_state":"go_left",   "write":"=","action":"LEFT"  },
+      { "read":"." , "to_state":"paste_one","write":".","action":"RIGHT" }
+    ],
+    "paste_one": [
+      { "read":"1", "to_state":"paste_one","write":"1","action":"RIGHT" },
+      { "read":"=", "to_state":"paste_one","write":"=","action":"RIGHT" },
+      { "read":"." , "to_state":"check_end","write":"1","action":"RIGHT" }
+    ],
+    "check_end": [
+      { "read":"1", "to_state":"copy_one","write":"1","action":"RIGHT" },
+      { "read":"=", "to_state":"HALT",    "write":".","action":"RIGHT" },
+      { "read":"." , "to_state":"HALT",    "write":".","action":"RIGHT" }
+    ],
+    "HALT": []
+  }
 }
