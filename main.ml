@@ -21,50 +21,67 @@ let print_help () =
   exit 0
 
 (* -------------------------------------------------------------------------- *)
-(* 2) Chargement et simulation de la machine                                   *)
+(* 2) Chargement, validation de l’entrée et simulation                          *)
 (* -------------------------------------------------------------------------- *)
 
 let load_machine json_file input =
-  (* Lecture du JSON *)
+  (* 2.1) Lecture du JSON *)
   let json = Yojson.Basic.from_file json_file in
-  let name = json |> member "name" |> to_string in
 
-  (* Underflow check pour unary_sub *)
-  if name = "unary_sub" then begin
-    (try
-       let dash = String.index input '-' in
-       let eq   = String.index input '=' in
-       let left  = String.sub input 0 dash in
-       let right = String.sub input (dash + 1) (eq - dash - 1) in
-       let count_ones s =
-         String.fold_left (fun acc c -> if c = '1' then acc + 1 else acc) 0 s
-       in
-       let nl = count_ones left and nr = count_ones right in
-       if nl < nr then (
-         Printf.eprintf
-           "❌ Erreur : soustraction impossible %d - %d (underflow)\n"
-           nl nr;
-         exit 1
-       )
-     with Not_found -> ())
-  end;
-
-  (* Extraction des champs du JSON *)
+  (* 2.2) Extraction de l’alphabet et du blanc pour valider l’entrée *)
   let alphabet = json |> member "alphabet" |> to_list |> filter_string in
+  let blank    = json |> member "blank"    |> to_string in
+
+  (* 2.3) Validation que chaque caractère d’input est bien dans l’alphabet *)
+  String.iter (fun c ->
+    let s = String.make 1 c in
+    if s = blank then (
+      Printf.eprintf "❌ Erreur : le symbole blanc '%s' ne peut pas être dans l’entrée\n" blank;
+      exit 1
+    ) else if not (List.mem s alphabet) then (
+      Printf.eprintf "❌ Erreur : symbole non reconnu '%s' dans l’entrée\n" s;
+      exit 1
+    )
+  ) input;
+
+  (* 2.4) Extraction des autres champs *)
+  let name     = json |> member "name"     |> to_string in
   let initial  = json |> member "initial"  |> to_string in
   let finals   = json |> member "finals"   |> to_list |> filter_string in
-  let blank    = json |> member "blank"    |> to_string in
   let trs      = parse_transitions json in
   let states   = json |> member "states"   |> to_list |> filter_string in
 
-  (* Vérification formelle *)
-  validate_machine ~alphabet ~states ~initial ~finals ~blank ~transitions:trs;
+  (* 2.5) Underflow-check pour unary_sub *)
+  if name = "unary_sub" then begin
+    try
+      let dash  = String.index input '-' in
+      let eq    = String.index input '=' in
+      let left  = String.sub input 0 dash in
+      let right = String.sub input (dash + 1) (eq - dash - 1) in
+      let count_ones s =
+        String.fold_left (fun acc c -> if c = '1' then acc + 1 else acc) 0 s
+      in
+      let nl = count_ones left and nr = count_ones right in
+      if nl < nr then (
+        Printf.eprintf "❌ Erreur : soustraction impossible %d - %d (underflow)\n"
+          nl nr;
+        exit 1
+      )
+    with Not_found -> ()
+  end;
 
-  (* Affichage des infos *)
+  (* 2.6) Validation formelle de la machine *)
+  validate_machine
+    ~alphabet
+    ~states
+    ~initial
+    ~finals
+    ~blank
+    ~transitions:trs;
+
+  (* 2.7) Affichage des infos et lancement de la simulation *)
   Printf.printf "Nom de la machine : %s\n" name;
   Printf.printf "Entrée reçue       : %s\n\n" input;
-
-  (* Initialisation du ruban et lancement de la simulation *)
   let tape0 = init_tape input blank in
   run ~blank ~trs ~finals ~state:initial ~tape:tape0 ~steps_left:1000 1
 
