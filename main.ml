@@ -1,4 +1,3 @@
-
 open Turinglib.Tape
 open Turinglib.Parser
 open Turinglib.Simulator
