@@ -5,7 +5,7 @@ EXEC = main
 
 # Arguments de test par défaut
 JSON = machines/unary_sub.json
-INPUT = 111-11=
+INPUT = 111111-1111=
 
 all: install build
 
