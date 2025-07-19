@@ -49,25 +49,6 @@ let load_machine json_file input =
   let trs      = parse_transitions json in
   let states   = json |> member "states"   |> to_list |> filter_string in
 
-  (* 2.5) Underflow-check pour unary_sub *)
-  if name = "unary_sub" then begin
-    try
-      let dash  = String.index input '-' in
-      let eq    = String.index input '=' in
-      let left  = String.sub input 0 dash in
-      let right = String.sub input (dash + 1) (eq - dash - 1) in
-      let count_ones s =
-        String.fold_left (fun acc c -> if c = '1' then acc + 1 else acc) 0 s
-      in
-      let nl = count_ones left and nr = count_ones right in
-      if nl < nr then (
-        Printf.eprintf "❌ Erreur : soustraction impossible %d - %d (underflow)\n"
-          nl nr;
-        exit 1
-      )
-    with Not_found -> ()
-  end;
-
   (* 2.6) Validation formelle de la machine *)
   validate_machine
     ~alphabet
