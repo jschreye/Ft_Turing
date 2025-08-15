@@ -1,0 +1,47 @@
+{
+  "name": "unary_add_dedicated_universal",
+  "alphabet": ["&", "*", "{", "}", "[", "]", "<", ">", "C", "S", "P", "H", "1", "+", "=", ".", " "],
+  "blank": " ",
+  "states": [
+    "init", "skip_machine_desc",
+    "state_C", "state_S", 
+    "HALT"
+  ],
+  "initial": "init",
+  "finals": ["HALT"],
+  "transitions": {
+    "init": [
+      { "read": "C", "to_state": "skip_machine_desc", "write": "C", "action": "RIGHT" }
+    ],
+    "skip_machine_desc": [
+      { "read": "&", "to_state": "skip_machine_desc", "write": "&", "action": "RIGHT" },
+      { "read": "C", "to_state": "skip_machine_desc", "write": "C", "action": "RIGHT" },
+      { "read": "S", "to_state": "skip_machine_desc", "write": "S", "action": "RIGHT" },
+      { "read": "H", "to_state": "skip_machine_desc", "write": "H", "action": "RIGHT" },
+      { "read": "{", "to_state": "skip_machine_desc", "write": "{", "action": "RIGHT" },
+      { "read": "}", "to_state": "skip_machine_desc", "write": "}", "action": "RIGHT" },
+      { "read": "[", "to_state": "skip_machine_desc", "write": "[", "action": "RIGHT" },
+      { "read": "]", "to_state": "skip_machine_desc", "write": "]", "action": "RIGHT" },
+      { "read": "1", "to_state": "skip_machine_desc", "write": "1", "action": "RIGHT" },
+      { "read": "+", "to_state": "skip_machine_desc", "write": "+", "action": "RIGHT" },
+      { "read": ".", "to_state": "skip_machine_desc", "write": ".", "action": "RIGHT" },
+      { "read": ">", "to_state": "skip_machine_desc", "write": ">", "action": "RIGHT" },
+      { "read": "<", "to_state": "skip_machine_desc", "write": "<", "action": "RIGHT" },
+      { "read": "P", "to_state": "skip_machine_desc", "write": "P", "action": "RIGHT" },
+      { "read": "*", "to_state": "state_C", "write": "*", "action": "RIGHT" }
+    ],
+    "state_C": [
+      { "read": "1", "to_state": "state_C", "write": "1", "action": "RIGHT" },
+      { "read": "+", "to_state": "state_C", "write": ".", "action": "RIGHT" },
+      { "read": "=", "to_state": "state_S", "write": ".", "action": "LEFT" },
+      { "read": ".", "to_state": "state_C", "write": ".", "action": "RIGHT" },
+      { "read": " ", "to_state": "state_C", "write": " ", "action": "RIGHT" }
+    ],
+    "state_S": [
+      { "read": "1", "to_state": "HALT", "write": "1", "action": "RIGHT" },
+      { "read": ".", "to_state": "state_S", "write": ".", "action": "LEFT" },
+      { "read": "*", "to_state": "state_S", "write": "*", "action": "LEFT" }
+    ],
+    "HALT": []
+  }
+}

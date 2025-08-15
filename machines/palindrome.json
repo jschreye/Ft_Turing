@@ -33,7 +33,6 @@
       { "read": ".", "to_state": "go_right_b", "write": ".", "action": "RIGHT" },
       { "read": "=", "to_state": "check_b",    "write": "=", "action": "LEFT"  }
     ],
-
     "check_a": [
       { "read": "a", "to_state": "mark_right", "write": "X", "action": "LEFT"  },
       { "read": "b", "to_state": "write_no",   "write": "b", "action": "RIGHT" },
@@ -57,7 +56,6 @@
       { "read": ".", "to_state": "start",      "write": ".", "action": "RIGHT" },
       { "read": "=", "to_state": "start",      "write": "=", "action": "RIGHT" }
     ],
-
     "write_yes": [
       { "read": "X", "to_state": "write_yes",  "write": "X", "action": "RIGHT" },
       { "read": "a", "to_state": "write_yes",  "write": "a", "action": "RIGHT" },
