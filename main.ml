@@ -89,7 +89,7 @@ let load_machine json_file input alphabet_arg blank_arg states_arg =
   Printf.printf "Nom de la machine : %s\n" name;
   Printf.printf "Entrée reçue       : %s\n\n" input;
   let tape0 = init_tape input blank in
-  run ~blank ~trs ~finals ~state:initial ~tape:tape0 ~steps_left:1000 1
+  run ~blank ~trs ~finals ~state:initial ~tape:tape0 ~steps_left:max_int 1
 
 (* -------------------------------------------------------------------------- *)
 (* 3) Point d’entrée                                                           *)

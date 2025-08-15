@@ -1,0 +1,11 @@
+Commande d'execution de universal.json
+
+dune exec ./main.exe -- machines/universal.json   --alphabet "1+=." \
+  --blank "." \
+  --states "scan_right,copy_one,go_left,paste_one,check_end,HALT" \
+  "11+1="
+
+Commande d'execution de pseudo_universal.json
+
+dune exec ./main.exe -- machines/pseudo_universal.json "C&C{[+S>.][.H>.][1C>1]}S{[1P<+][.H<.]}P{[.C>1]}*1+11"
+
